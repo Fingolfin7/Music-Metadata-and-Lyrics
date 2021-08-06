@@ -28,7 +28,7 @@ def search_song_lyrics(song_name="", song_artist=""):
                 found_song = hit
                 title = hit['result']['title']
                 artist = hit['result']['primary_artist']['name']
-                print(format_text(f"Found: [yellow][italic]'{title}' by '{artist}'[reset]"))
+                print(format_text(f"Found: [bright yellow][italic]'{title}' by '{artist}'[reset]"))
                 break
 
         if found_song:
@@ -60,26 +60,22 @@ def search_song_lyrics(song_name="", song_artist=""):
             return found_song
 
     def offline_search():
-        for artist_key in song_dict.dict.keys():  # loop through artists
+        for artist_key in song_dict.dict:  # loop through artists
             if artist_key.lower().find(song_artist.lower()) != -1:  # if artist name is found in key
-                for pair in song_dict.dict[artist_key]:  # loop through song-lyric pairs in dict
-                    for song_key in pair.keys():  # loop through song keys
-                        if song_key.lower().find(song_name.lower()) != -1 and\
-                                artist_key.lower().find(song_artist.lower()) != -1:  # if a song name is found in song key
-                            print(format_text(f"Found: [yellow][italic]'{song_key}'[reset] by"
-                                              f" '[yellow][italic]{artist_key}'[reset]"))
-                            return pair[song_key]
+                for song in song_dict.dict[artist_key]:  # loop through song keys in  artist dict
+                    if song.lower().find(song_name.lower()) != -1:  # if a song name is found in song key
+                        print(format_text(f"Found: [bright yellow][italic]'{song}' by"
+                                          f" '{artist_key}'[reset]"))
+                        return song_dict.dict[artist_key][song]
 
-        print(format_text(
-            f"Lyrics for [yellow][italic]{song_name}[reset] by [yellow][italic]{song_artist}[reset] not found.\n"))
+        print(format_text(f"Lyrics for [bright yellow][italic]'{song_name}' by '{song_artist}'[reset] not found.\n"))
 
-        for artist_key in song_dict.dict.keys():
+        for artist_key in song_dict.dict:
             if artist_key.lower().find(song_artist.lower()) != -1:
-                print(format_text(f"Songs from [yellow][italic]{artist_key}[reset]"))
+                print(format_text(f"Songs from [bright yellow][italic]{artist_key}[reset]"))
                 index = 0
-                for found_pair in song_dict.dict[artist_key]:
-                    found_keys = list(found_pair.keys())[0]
-                    print(format_text(f"[yellow][italic]{index + 1}. {str(found_keys)}[reset]"))
+                for found_song in song_dict.dict[artist_key]:
+                    print(format_text(f"[bright yellow][italic]{index + 1}. {found_song}[reset]"))
                     index += 1
                 print("")
 
@@ -87,7 +83,7 @@ def search_song_lyrics(song_name="", song_artist=""):
 
     if check_internet():
         count = 0
-        print(format_text("Searching [italic][yellow]Genius.com[reset] for lyrics"))
+        print(format_text("Searching [italic][bright yellow]Genius.com[reset] for lyrics"))
 
         while count < 3:
             value = online_search()
@@ -106,8 +102,11 @@ def search_song_lyrics(song_name="", song_artist=""):
         return offline_search()
 
 
-os.system("cls")
-lyrics = search_song_lyrics("We Didn’t Start the Fire", "Billy Joel")
-if lyrics is not None:
-    print(format_text(f"[italic][yellow]{lyrics}[reset]"))
-os.system("pause")
+while True:
+    os.system("cls")
+    get_song = input("Please Enter Song Name: ")
+    get_artist = input("Please Enter Artist Name: ")
+    lyrics = search_song_lyrics(get_song, get_artist)
+    if lyrics:
+        print(format_text(f"[italic][bright yellow]{lyrics}[reset]"))
+    input(">")
