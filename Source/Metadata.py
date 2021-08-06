@@ -2,6 +2,7 @@ import requests
 import re
 import eyed3
 import os
+from Auth_Code import GENIUS_TOKEN
 from datetime import datetime
 from ColourText import format_text
 from check_internet import check_internet
@@ -67,7 +68,7 @@ def get_metadata(song_file, art_option=0):
         query = {"q": f"{song_base_name}",
                  "text_format": "plain"}
 
-        headers = {"Authorization": "Bearer 1GMeKxBJy-XdctY7-7BcfRnWxeeTghUb6YCg71JXHfoLKEDDFdamibvhwrNMsFjS"}
+        headers = {"Authorization": f"Bearer {GENIUS_TOKEN}"}
 
         base_url = "https://api.genius.com/"
 
