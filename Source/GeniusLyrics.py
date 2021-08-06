@@ -1,4 +1,5 @@
 import requests
+from Auth_Code import GENIUS_TOKEN
 from check_internet import check_internet
 from ColourText import format_text
 from SongsDict import *
@@ -13,7 +14,7 @@ def search_song_lyrics(song_name="", song_artist=""):
                  "text_format": "plain"}
         title = ""
         artist = ""
-        headers = {"Authorization": "Bearer 1GMeKxBJy-XdctY7-7BcfRnWxeeTghUb6YCg71JXHfoLKEDDFdamibvhwrNMsFjS"}
+        headers = {"Authorization": f"Bearer {GENIUS_TOKEN}"}
 
         base_url = "https://api.genius.com/"
 
@@ -99,16 +100,3 @@ def search_song_lyrics(song_name="", song_artist=""):
         print("Offline. Running local search.")
         # song_name = remove_special_characters(song_name)
         return offline_search()
-
-"""
-print(song_dict)
-
-while True:
-    os.system("cls")
-    get_song = input("Please Enter Song Name: ")
-    get_artist = input("Please Enter Artist Name: ")
-    lyrics = search_song_lyrics(get_song, get_artist)
-    if lyrics:
-        print(format_text(f"[italic][bright yellow]{lyrics}[reset]"))
-    input(">")
-"""
