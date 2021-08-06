@@ -5,8 +5,14 @@ Python project that updates metadata (including album art) and searches for lyri
 * Python 3
 * BeautifulSoup module
 * Eyed3 module
+* A [Genius API Token](https://docs.genius.com/#/getting-started-h1)
 
-These modules can be installed using `pip install`
+These modules can be installed using `pip install`.
+
+You will need to add a genius api token to the `Auth_Code.py` file. 
+
+You can generate a genius token [here](https://docs.genius.com/#/getting-started-h1)
+
 
 ## Update Metadata
 `Metadata.py` takes in an mp3 file (or a folder path) and searches for the corresponding metadata from Genius.com using the Genius API and Eyed3 module.
