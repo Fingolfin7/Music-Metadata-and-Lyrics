@@ -1,8 +1,7 @@
 import requests
-import os
 from check_internet import check_internet
 from ColourText import format_text
-from songs_dict import *
+from SongsDict import *
 from bs4 import BeautifulSoup
 
 song_dict = SongDict()
@@ -101,6 +100,8 @@ def search_song_lyrics(song_name="", song_artist=""):
         # song_name = remove_special_characters(song_name)
         return offline_search()
 
+"""
+print(song_dict)
 
 while True:
     os.system("cls")
@@ -110,3 +111,4 @@ while True:
     if lyrics:
         print(format_text(f"[italic][bright yellow]{lyrics}[reset]"))
     input(">")
+"""
