@@ -36,15 +36,15 @@ Setting `art_option` to 0 will update the file with the songs *Album Art*,
 Setting it to 1 will update the file to the songs *Song Art*, which sometimes differ.
 
 ## Search Song Lyrics
-`Genius Lyrics.py` takes in a song name and artist name and searches Genius.com for the lyrics. The lyrics are saved to a json file called `song_lyrics.json`. Searches are performed on this saved data when offline.
+`GeniusLyrics.py` takes in a song name and artist name and searches Genius.com for the lyrics. The lyrics are saved to a json file called `song_lyrics.json`. Searches are performed on this saved data when offline. Here is an example, running `GUI.py` which is a simple gui for getting song lyrics
 
 __Example Search__:
 
-![image](https://user-images.githubusercontent.com/63872314/128448720-6d7f92a6-f50b-4587-b5d1-fbe38f7c9e97.png)
+![image](https://user-images.githubusercontent.com/63872314/128579595-604eba7a-b5f2-4a3b-936d-5d20945767e9.png)
 
 __Output__:
 
-![image](https://user-images.githubusercontent.com/63872314/128448820-81576b06-9500-4168-b291-2638a3d3a74c.png)
+![image](https://user-images.githubusercontent.com/63872314/128579639-bb099cbe-0d5d-4a0f-99af-fe760f9c8308.png)
 
 ## Contribute to the project
 Take a look, run the code, and contribute if you'd like!
