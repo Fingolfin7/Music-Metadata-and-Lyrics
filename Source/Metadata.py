@@ -8,11 +8,23 @@ from check_internet import check_internet
 
 
 def clean_song_name(song_name=""):
+    problem_strings = ["Feat", "FT", "HD", "Lyrics", "Official", "Audio", "Video"]
+    song_name = song_name.lower()
+
     pattern = r"\[.*?\]"
     song_name = re.sub(pattern, "", song_name)
 
     pattern = r"\(.*?\)"
     song_name = re.sub(pattern, "", song_name)
+
+    for problem_sting in problem_strings:
+        while song_name.find(problem_sting.lower()) != -1:
+            song_name = song_name.replace(problem_sting.lower(), " ")
+
+    while song_name.find("_") != -1:
+        song_name = song_name.replace("_", " ")
+
+    song_name = " ".join(song_name.split())  # remove whitespace
 
     return song_name
 
@@ -112,6 +124,12 @@ def get_metadata(song_file, art_option=0):
             else:
                 year = ""
 
+            # remove old tag data
+            audio.tag.remove(song_file)
+            # remove song art
+            for img in audio.tag.images:
+                audio.tag.images.remove(img.description)
+
             # update tags
             audio.tag.artist = remove_non_ascii(artist)
             audio.tag.album = remove_non_ascii(album)
@@ -161,8 +179,9 @@ def getSongsList():
     return [(str(file_path) + "\\" + file) for file in os.listdir(file_path) if file.endswith(".mp3")]
 
 
+os.system("cls")
+
 for song in getSongsList():
-    os.system("cls")
     get_metadata(song)
 
 os.system("pause")
