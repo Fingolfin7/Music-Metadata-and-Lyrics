@@ -1,13 +1,13 @@
 import requests
 import re
-import eyed3
+import eyed3 # module for editing mp3 metadata tags
 import os
 from Auth_Code import GENIUS_TOKEN
 from datetime import datetime
-from ColourText import format_text
+from ColourText import format_text # a function I made to color and format text using ascii escape codes
 from check_internet import check_internet
 
-
+# function to clean a given string for the genius api search
 def clean_song_name(song_name=""):
     problem_strings = ["Feat", "FT", "HD", "Lyrics", "Official", "Audio", "Video"]
     song_name = song_name.lower()
@@ -29,7 +29,7 @@ def clean_song_name(song_name=""):
 
     return song_name
 
-
+# remove non ascii characters from a string to avoid a bunch of search and saving errors
 def remove_non_ascii(in_string=""):
     try:
         in_string = in_string.encode("ascii", errors="ignore").decode()
@@ -51,71 +51,89 @@ def remove_special_characters(in_string=""):
 
     return remove_non_ascii(in_string)
 
-
+# takes in a song file name, searches genius.com for the metadata, and updates the mp3 file. 
 def get_metadata(song_file, art_option=0):
-    if check_internet():
+    if check_internet(): # check for an internet connection.
         print(format_text("Searching [italic][bright yellow]Genius.com[reset] for metadata\n"))
-
+        
         song_file = os.path.normpath(song_file)
+        
+        #get the cleaned basename for the file, minus the file extension
         song_base_name = os.path.basename(song_file)
         song_base_name = clean_song_name(song_base_name[0:-4])
+        
+        # set the log level for eyed3 to Error to avoid spamming the console
         eyed3.log.setLevel("ERROR")
+        
+        #load in and Init an audio tag
         audio = eyed3.load(song_file)
 
         if audio.tag is None:
             audio.initTag()
-
+            
+        # search genius.com using the cleaned file name. Using the api token for authorization
         query = {"q": f"{song_base_name}",
                  "text_format": "plain"}
 
         headers = {"Authorization": f"Bearer {GENIUS_TOKEN}"}
 
         base_url = "https://api.genius.com/"
-
+        
+        # getting the request back in a json format
         data = requests.get(f"https://api.genius.com/search/", params=query, headers=headers).json()
+        
         found_song = None
-
+        
+        # search through the array of 'hits' from the search request
         for hit in data['response']['hits']:
             title = remove_non_ascii(hit['result']['title'])
             artist = remove_non_ascii(hit['result']['primary_artist']['name'])
-
+            
+            # look for either the artist's name or the song name in the song name we used for the search
             if song_base_name.lower().find(remove_special_characters(artist.lower())) != -1 or \
-                    song_base_name.lower().find(remove_special_characters(title.lower())) != -1:
+                    song_base_name.lower().find(remove_special_characters(title.lower())) != -1: 
+                
+                # if we can find either we can assume that we found the correct song and set 'found_song' to our search hit
                 found_song = hit
+                
                 print(format_text(f"Found: [bright yellow][italic]'{title}' by '{artist}'[reset]"))
                 break
             else:
                 print(format_text(f"Couldn't find anything for [bright yellow][italic]{song_base_name}[reset]\n"))
                 return
-
+            
+            # if the search was successful, and we have found a hit
         if found_song:
-            song_id = found_song['result']['id']
-            artist = remove_non_ascii(found_song['result']['primary_artist']['name'])
-
+            song_id = found_song['result']['id'] # get the id of the song which we'll use for another search
+            artist = remove_non_ascii(found_song['result']['primary_artist']['name']) # get the artist name from the search hit
+            
+            # run another search to get the sing data from genius using the id
             song_data = requests.get(f"{base_url}songs/{song_id}?text_format=plain", headers=headers).json()
             song_data = song_data['response']['song']
             # print(song_data)
 
-            if song_data['album']:
+            if song_data['album']: #if the album data is set
                 album = remove_non_ascii(song_data['album']['name'])
                 album_artist = remove_non_ascii(song_data['album']['artist']['name'])
 
-                if art_option == 0:
+                if art_option == 0: # if this is 0 then get the url for the album art rather than the song art image
                     art_url = song_data['album']['cover_art_url']
-                    if art_url is None:
+                    if art_url is None: # in the case that there is no album art get the song art url
                         art_url = song_data['song_art_image_url']
-                else:
+                else: # if art_option is set to 1 (or anything other than 0) get the song art image 
                     art_url = song_data['song_art_image_url']
-                    if art_url is None:
+                    if art_url is None: # if there is no song art, get the album art
                         art_url = song_data['album']['cover_art_url']
 
-            else:
+            else: # in the case that there is no album data
                 art_url = song_data['song_art_image_url']
                 album = song_data['title']
                 album_artist = artist
-
+            
+            #get the title of the song
             title = song_data['title']
-
+            
+            #get the year it was released
             if song_data['release_date']:
                 date_str = song_data['release_date']
                 year = datetime.strptime(date_str, '%Y-%m-%d').year
@@ -127,7 +145,7 @@ def get_metadata(song_file, art_option=0):
 
             # remove old tag data
             audio.tag.remove(song_file)
-            # remove song art
+            # remove old song/album art
             for img in audio.tag.images:
                 audio.tag.images.remove(img.description)
 
@@ -146,20 +164,23 @@ def get_metadata(song_file, art_option=0):
                               f"\nYear: [italic][bright yellow]{year}[reset]\n")
                   )
 
-            # get file extension
+            # get file extension for the album/art image
             extension = os.path.splitext(art_url)[1]
             extension = extension[1:]
-
+            
+            # came across a few cases were extension came out like png?127838, so this is here to remove everything from the ? forward 
             if extension.find("?") != -1:
                 extension = extension[0: extension.find("?")]
-
+            
+            # webp images refuse to save for some reason, so if the extension is webp, try and get the album cover art which is usually a png or jpeg
             if extension in ["webp", "WEBP"]:
                 art_url = song_data['album']['cover_art_url']
                 extension = os.path.splitext(art_url)[1]
                 extension = extension[1:]
-
+            
+            #get the image as a request
             r2 = requests.get(art_url)
-            # open(f"Album Art/{song_base_name}.{extension}", "wb").write(r2.content)
+            # save the request content to the file
             audio.tag.images.set(3, r2.content, f'image/{extension}')
 
             # save for the various tag versions
