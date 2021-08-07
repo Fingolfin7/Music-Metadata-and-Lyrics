@@ -18,5 +18,5 @@ def get_token():
         print('Error:')
         print(e)
         print('----------------')
-        print('An error has occured, make sure you created "auth_code.txt".')
+        print('An error has occurred, make sure you created "auth_code.txt".')
         return None

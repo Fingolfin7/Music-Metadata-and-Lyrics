@@ -1,17 +1,18 @@
 import requests
 import get_auth_token
+from functions import remove_non_ascii
 from check_internet import check_internet
 from ColourText import format_text
-from SongsDict import *
+from SongsDict import SongDict
 from bs4 import BeautifulSoup
 
 GENIUS_TOKEN = get_auth_token.get_token()
 
-if GENIUS_TOKEN == None:
+if GENIUS_TOKEN is None:
     print('Please create the auth_token.txt file inside the Source folder and put in a Genius Token.')
     exit()
 
-# a class containing a dicitionary with all the saved lyrics from previous searches
+# a class containing a dictionary with all the saved lyrics from previous searches
 song_dict = SongDict()
 
 
@@ -62,7 +63,9 @@ def search_song_lyrics(song_name="", song_artist=""):
                 # Genius nice and has a tag called 'lyrics'
                 scraped_lyrics = html.find('div', class_='lyrics').get_text()
 
-                # save to the dictionary object. These can then be retreived later on for an offline search
+                # save to the dictionary object. These can then be retrieved later on for an offline search
+                artist = remove_non_ascii(artist)
+                title = remove_non_ascii(title)
                 song_dict.save_to_dict(artist, title, scraped_lyrics)
                 song_dict.save_dict()
             except:
@@ -74,7 +77,7 @@ def search_song_lyrics(song_name="", song_artist=""):
             return found_song
     
     # offline search. search the dictionary object for song lyrics
-    def offline_search(): 
+    def offline_search():
         for artist_key in song_dict.dict:  # loop through artists
             if artist_key.lower().find(song_artist.lower()) != -1:  # if artist name is found in key
                 for song in song_dict.dict[artist_key]:  # loop through song keys in  artist dict
@@ -111,8 +114,12 @@ def search_song_lyrics(song_name="", song_artist=""):
                 return value
 
         print("Online searched failed. Running local search")
+        song_artist = remove_non_ascii(song_artist)
+        song_name = remove_non_ascii(song_name)
         return offline_search()
 
     else:  # if there isn't an internet connection, run an offline search
         print("Offline. Running local search.")
+        song_artist = remove_non_ascii(song_artist)
+        song_name = remove_non_ascii(song_name)
         return offline_search()
