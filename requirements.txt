@@ -1,0 +1,9 @@
+beautifulsoup4==4.9.3
+coverage==5.5
+deprecation==2.1.0
+eyed3==0.9.6
+filetype==1.0.7
+packaging==21.0
+pyparsing==2.4.7
+soupsieve==2.2.1
+toml==0.10.2

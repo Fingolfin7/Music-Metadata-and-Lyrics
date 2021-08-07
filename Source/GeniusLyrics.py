@@ -1,9 +1,15 @@
 import requests
-from Auth_Code import GENIUS_TOKEN
+import get_auth_token
 from check_internet import check_internet
 from ColourText import format_text
 from SongsDict import *
 from bs4 import BeautifulSoup
+
+GENIUS_TOKEN = get_auth_token.get_token()
+
+if GENIUS_TOKEN == None:
+    print('Please create the auth_token.txt file inside the Source folder and put in a Genius Token.')
+    exit()
 
 # a class containing a dicitionary with all the saved lyrics from previous searches
 song_dict = SongDict()

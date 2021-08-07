@@ -2,10 +2,16 @@ import requests
 import re
 import eyed3 # module for editing mp3 metadata tags
 import os
-from Auth_Code import GENIUS_TOKEN
+import get_auth_token
 from datetime import datetime
 from ColourText import format_text # a function I made to color and format text using ascii escape codes
 from check_internet import check_internet
+
+GENIUS_TOKEN = get_auth_token.get_token()
+
+if GENIUS_TOKEN == None:
+    print('Please create the auth_token.txt file inside the Source folder and put in a Genius Token.')
+    exit()
 
 # function to clean a given string for the genius api search
 def clean_song_name(song_name=""):
