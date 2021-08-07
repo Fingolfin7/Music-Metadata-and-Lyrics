@@ -5,7 +5,6 @@ from tkinter import ttk
 from GeniusLyrics import search_song_lyrics, song_dict
 from SongsDict import SongDict
 
-
 def search(event=None):
     os.system("cls")
     print(f"Song: {songName.get()}\nArtist: {artistName.get()}")
@@ -34,6 +33,7 @@ def search(event=None):
 
 
 root = Tk()
+root.title('Music Metadata and Lyrics')
 root.resizable(width=False, height=False)
 frame = Frame(root)
 # ttk.Style().theme_use("clam")
