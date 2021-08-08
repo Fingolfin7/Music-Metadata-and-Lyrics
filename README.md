@@ -25,15 +25,19 @@ You can generate a genius token [here](https://docs.genius.com/#/getting-started
 
 __Here is an example in a test folder I made:__
 
-![image](https://user-images.githubusercontent.com/63872314/128447097-ededaaad-9bea-4273-a653-b72e134a9da5.png)
+![image](https://user-images.githubusercontent.com/63872314/128647612-7f2d8515-69ad-4739-b986-fe6ce9ef14d1.png)
 
 __Run Metadata Search (collected from Genius.com):__
 
-![image](https://user-images.githubusercontent.com/63872314/128447244-50ff1129-283f-4468-b515-7a03ecc0d511.png)
+![image](https://user-images.githubusercontent.com/63872314/128647830-2b3e475a-8fe5-41d5-9aa5-fe424e63d00e.png)
+
+__Finished Search:__
+
+![image](https://user-images.githubusercontent.com/63872314/128647739-e025fb6e-d320-4e5d-88e7-4eb40c8e175e.png)
 
 __Updated mp3 file:__
 
-![image](https://user-images.githubusercontent.com/63872314/128447351-ac50ae19-5c14-4fa3-bb67-fdf234412721.png)
+![image](https://user-images.githubusercontent.com/63872314/128647768-c0492c67-567c-4e8a-b6b5-4eba72a060f9.png)
 
 Metadata.py contains the funtcion get_metadata,
 
