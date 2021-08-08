@@ -88,7 +88,7 @@ def get_metadata(song_file, art_option=0):
                 break
             else:
                 print(format_text(f"Couldn't find anything for [bright yellow][italic]{song_base_name}[reset]\n"))
-                return
+                return None
 
             # if the search was successful, and we have found a hit
         if found_song:
@@ -179,22 +179,37 @@ def get_metadata(song_file, art_option=0):
             audio.tag.save(version=(1, None, None))
             audio.tag.save()
 
+            metadata_dict = {
+                "title": title,
+                "artist": artist,
+                "album": album,
+                "album_artist": album_artist,
+                "year": year,
+                "image_req": r2,
+                "img_extension": "." + extension}
+
             print("Done!")
+            return metadata_dict
         else:
             return None
     else:
         print("Offline. Cannot run search")
+        return None
 
 
-def getSongsList():
-    file_path = os.path.normpath(input("Please enter a folder path: "))
+def getSongsList(path=""):
+    file_path = os.path.normpath(path)
 
-    return [(str(file_path) + "\\" + file) for file in os.listdir(file_path) if file.endswith(".mp3")]
+    if os.path.isdir(file_path):
+        return [(str(file_path) + "\\" + file) for file in os.listdir(file_path) if file.endswith(".mp3")]
+    elif os.path.isfile(file_path):
+        return [file_path]
 
-
+"""
 os.system("cls")
 
-for song in getSongsList():
+for song in getSongsList(input("Please enter a folder path: ")):
     get_metadata(song)
 
 os.system("pause")
+"""

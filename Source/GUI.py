@@ -1,69 +1,44 @@
-import os
-import threading
 from tkinter import *
-from tkinter import messagebox
-from GeniusLyrics import search_song_lyrics, song_dict
+from tkinter import ttk
+from PIL import ImageTk, Image
+from MetadataGUI import MetadataGUI
+from GeniusLyricsGUI import GeniusLyricsGUI
 
 
-def search(event=None):
-    def thread_func():
-        os.system("cls")
-        print(f"Song: {songName.get()}\nArtist: {artistName.get()}")
-        lyrics = search_song_lyrics(songName.get(), artistName.get())
-        if lyrics:
+def lyrics_btn(event=None):
+    welcomeFrame.destroy()
+    GeniusLyricsGUI(root)
 
-            if lyrics[0] == "\n" and lyrics[1] == "\n":
-                lyrics = lyrics[2:]
 
-            print(lyrics)
-
-            # pack and attach to textbox
-            scrollbar.pack(side=RIGHT, fill=Y)
-            output.config(yscrollcommand=scrollbar.set)
-            scrollbar.config(command=output.yview)
-
-            # pack output
-            output.pack(side=BOTTOM, fill=BOTH)
-            output.delete(1.0, "end")
-            output.insert(1.0, lyrics)
-        else:
-            messagebox.showinfo(
-                "Failed",
-                f"Couldn't find fyrics for\n'{songName.get()}' by '{artistName.get()}'"
-            )
-
-    search_thread = threading.Thread(target=thread_func)
-    search_thread.start()
+def metadata_btn(event=None):
+    welcomeFrame.destroy()
+    MetadataGUI(root)
 
 
 root = Tk()
 root.title('Music Metadata and Lyrics')
+icon = ImageTk.PhotoImage(Image.open("images/img2.png"))
+root.iconphoto(True, icon)
 root.resizable(width=False, height=False)
-frame = Frame(root)
 
-songName = StringVar()
-artistName = StringVar()
+welcomeFrame = Frame(root)
 
-top_section = LabelFrame(frame, font="Calibri", pady=2)
+Label(welcomeFrame, text="Music Metadata and Lyrics", font="Calibri 16").pack(side=TOP, fill=BOTH)
+Label(welcomeFrame, text="Powered by Genius.com", font="Calibri 10 italic").pack(side=TOP, fill=BOTH, pady=5)
 
-Label(top_section, text="Song").pack(side=LEFT, padx=4)
-songEntry = Entry(top_section, textvariable=songName)
-songEntry.pack(side=LEFT, padx=4)
+img = ImageTk.PhotoImage(Image.open("images/img2.png"))
+imgLabel = Label(welcomeFrame, image=img)
+imgLabel.image = img
+imgLabel.pack(side=TOP, pady=10)
 
-Label(top_section, text="Artist").pack(side=LEFT, padx=4)
-artistName = Entry(top_section, textvariable=artistName)
-artistName.pack(side=LEFT, padx=4)
 
-searchButton = Button(top_section, text="Search")
-searchButton.bind("<Button-1>", search)
-root.bind("<Return>", search, add="+")
-searchButton.pack(side=LEFT)
+lyrics_button = Button(welcomeFrame, text="Search Lyrics", font="Calibri 12", bd=2, padx=7, pady=7, relief="groove")
+lyrics_button.bind("<Button-1>", lyrics_btn)
+lyrics_button.pack(side=TOP, padx=1, pady=1, fill=BOTH)
 
-output = Text(frame, font="Calibri 11", width=root.winfo_width(), height=25)
+metadata_button = Button(welcomeFrame, text="Search Metadata", font="Calibri 12", bd=2, padx=7, pady=7, relief="groove")
+metadata_button.bind("<Button-1>", metadata_btn)
+metadata_button.pack(side=TOP, padx=1, pady=1, fill=BOTH)
 
-# create scrollbar
-scrollbar = Scrollbar(frame)
-
-top_section.pack(side=TOP)
-frame.pack()
+welcomeFrame.pack()
 root.mainloop()
