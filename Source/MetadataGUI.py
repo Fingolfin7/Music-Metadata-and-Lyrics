@@ -79,6 +79,7 @@ class MetadataGUI:
 
     def metadata(self, event=None):
         def thread_func():
+            os.system("cls")
             for song in getSongsList(self.file_path.get()):
                 if self.boolVar.get():
                     print(f"Song Art: {self.boolVar.get()}")
