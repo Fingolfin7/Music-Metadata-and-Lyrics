@@ -38,7 +38,7 @@ class GeniusLyricsGUI:
     def search(self, event=None):
         def thread_func():
             os.system("cls")
-            print(f"Song: {self.songName.get()}\nArtist: {self.artistName.get()}")
+            print(f"Song: {self.songName.get()}\nArtist: {self.artistName.get()}\n")
             lyrics = search_song_lyrics(self.songName.get(), self.artistName.get())
             if lyrics:
 

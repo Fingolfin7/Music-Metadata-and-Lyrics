@@ -17,7 +17,7 @@ if GENIUS_TOKEN is None:
 
 # function to clean a given string for the genius api search
 def clean_song_name(song_name=""):
-    problem_strings = ["Feat", "FT", "HD", "Lyrics", "Official", "Audio", "Video"]
+    problem_strings = ["Feat", "FT", "HD", "HQ", "Lyrics", "Official", "Audio", "Video"]
     song_name = song_name.lower()
 
     pattern = r"\[.*?\]"
@@ -193,7 +193,7 @@ def get_metadata(song_file, art_option=0):
         else:
             return None
     else:
-        print("Offline. Cannot run search")
+        print(format_text("[italic][bright red]Offline. Cannot run search[reset]"))
         return None
 
 

@@ -61,7 +61,7 @@ def search_song_lyrics(song_name="", song_artist=""):
             [h.extract() for h in html(['style', 'script'])]
 
             try:
-                # Genius nice and has a tag called 'lyrics'
+                # Genius has a tag called 'lyrics'
                 scraped_lyrics = html.find('div', class_='lyrics').get_text()
 
                 # save to the dictionary object. These can then be retrieved later on for an offline search
@@ -97,14 +97,14 @@ def search_song_lyrics(song_name="", song_artist=""):
         return offline_search
 
     # if nothing is found, and there is an internet connection, do an online search
-    elif check_internet() and offline_search is None:  # if there is an internet connection, run an online search
+    elif check_internet() and offline_search is None:
         count = 0
         print(format_text("Searching [italic][bright yellow]Genius.com[reset] for lyrics"))
 
         while count < 3:  # Try online search 3 times before doing an offline search
             value = online_search()
             if value is None:
-                print(f"Try {count + 1} failed.\n")
+                print(format_text(f"[italic][bright red]Try {count + 1} failed.[reset]\n"))
                 count += 1
             else:
                 return value
