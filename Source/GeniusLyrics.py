@@ -109,17 +109,17 @@ def search_song_lyrics(song_name="", song_artist=""):
             else:
                 return value
 
-        # if nothing was found from the offline and online searches
-        print(format_text(f"Lyrics for [bright yellow][italic]'{song_name}' by '{song_artist}'[reset] not found.\n"))
+    # if nothing was found from the offline and online searches
+    print(format_text(f"Lyrics for [bright yellow][italic]'{song_name}' by '{song_artist}'[reset] not found.\n"))
 
-        # if the song isn't found, search for the artist and print a list of the available song lyrics
-        for artist_key in song_dict.dict:
-            if artist_key.lower().find(song_artist.lower()) != -1:
-                print(format_text(f"Songs from [bright yellow][italic]{artist_key}[reset]"))
+    # if the song isn't found, search for the artist and print a list of the available song lyrics
+    for artist_key in song_dict.dict:
+        if artist_key.lower().find(song_artist.lower()) != -1:
+            print(format_text(f"Songs from [bright yellow][italic]{artist_key}[reset]"))
 
-                index = 0
-                for found_song in song_dict.dict[artist_key]:
-                    print(format_text(f"[bright yellow][italic]{index + 1}. {found_song}[reset]"))
-                    index += 1
-                print("")
+            index = 0
+            for found_song in song_dict.dict[artist_key]:
+                print(format_text(f"[bright yellow][italic]{index + 1}. {found_song}[reset]"))
+                index += 1
+            print("")
     return None

@@ -59,7 +59,7 @@ class GeniusLyricsGUI:
             else:
                 messagebox.showinfo(
                     "Failed",
-                    f"Couldn't find fyrics for\n'{self.songName.get()}' by '{self.artistName.get()}'"
+                    f"Couldn't find lyrics for\n'{self.songName.get()}' by '{self.artistName.get()}'"
                 )
 
         search_thread = threading.Thread(target=thread_func)
