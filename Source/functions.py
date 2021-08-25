@@ -3,6 +3,7 @@ import re
 
 # remove non ascii characters from a string to avoid a bunch of search and saving errors
 def remove_non_ascii(in_string=""):
+    in_string = in_string.strip("​")
     in_string = re.sub("[•]", "", in_string)
     in_string = unidecode.unidecode(in_string)
 
@@ -27,6 +28,7 @@ def remove_special_characters(in_string=""):
 
 def main():
     print(remove_non_ascii(input(">")))
+    input()
 
 
 if __name__ == "__main__":

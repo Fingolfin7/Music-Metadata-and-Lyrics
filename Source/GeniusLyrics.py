@@ -41,7 +41,7 @@ def search_song_lyrics(song_name="", song_artist=""):
             if result_title.find(song_artist.lower()) != -1 or result_title.find(
                     song_name.lower()) != -1:  # if we can find the artist or song name, then we have found our song
                 found_song = hit
-                title = hit['result']['title']
+                title = hit['result']['title_with_featured']
                 artist = hit['result']['primary_artist']['name']
                 print(format_text(f"Found: [bright yellow][italic]'{title}' by '{artist}'[reset]"))
                 break
@@ -121,5 +121,15 @@ def search_song_lyrics(song_name="", song_artist=""):
             for found_song in song_dict.dict[artist_key]:
                 print(format_text(f"[bright yellow][italic]{index + 1}. {found_song}[reset]"))
                 index += 1
-            print("")
+            print()
     return None
+
+
+def main():
+    import os
+    os.system("cls")
+    search_song_lyrics("Take Care", "Drake")
+
+
+if __name__ == "__main__":
+    main()

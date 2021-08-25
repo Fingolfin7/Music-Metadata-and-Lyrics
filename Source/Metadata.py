@@ -17,7 +17,7 @@ if GENIUS_TOKEN is None:
 
 # function to clean a given string for the genius api search
 def clean_song_name(song_name=""):
-    problem_strings = ["Feat", "FT", "HD", "HQ", "Lyrics", "Official", "Audio", "Video"]
+    problem_strings = ["HD", "HQ", "Lyrics", "Official", "Audio", "Video", "."]
     song_name = song_name.lower()
 
     pattern = r"\[.*?\]"
@@ -28,10 +28,10 @@ def clean_song_name(song_name=""):
 
     for problem_sting in problem_strings:
         while song_name.find(problem_sting.lower()) != -1:
-            song_name = song_name.replace(problem_sting.lower(), " ")
+            song_name = song_name.replace(problem_sting.lower(), "")
 
     while song_name.find("_") != -1:
-        song_name = song_name.replace("_", " ")
+        song_name = song_name.replace("_", "")
 
     song_name = " ".join(song_name.split())  # remove whitespace
 
@@ -73,7 +73,7 @@ def get_metadata(song_file, art_option=0):
 
         # search through the array of 'hits' from the search request
         for hit in data['response']['hits']:
-            title = remove_non_ascii(hit['result']['title'])
+            title = remove_non_ascii(hit['result']['title_with_featured'])
             artist = remove_non_ascii(hit['result']['primary_artist']['name'])
 
             # look for either the artist's name or the song name in the song name we used for the search
@@ -119,8 +119,8 @@ def get_metadata(song_file, art_option=0):
                 album = song_data['title']
                 album_artist = artist
 
-            # get the title of the song
-            title = song_data['title']
+            # get the title (with featured artist) of the song
+            title = song_data['title_with_featured']
 
             # get the year it was released
             if song_data['release_date']:
@@ -205,11 +205,13 @@ def getSongsList(path=""):
     elif os.path.isfile(file_path):
         return [file_path]
 
-"""
-os.system("cls")
 
-for song in getSongsList(input("Please enter a folder path: ")):
-    get_metadata(song)
+def main():
+    os.system("cls")
 
-os.system("pause")
-"""
+    for song in getSongsList(input("Please enter a folder path: ")):
+        get_metadata(song)
+
+
+if __name__ == "__main__":
+    main()
