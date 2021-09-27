@@ -97,19 +97,22 @@ class MetadataGUI:
 
                     # album art
                     ext = mDict['img_extension']
-                    temp_name = self.title.get() + "by" + self.artist.get()
+                    temp_name = self.title.get() + " by " + self.artist.get()
 
-                    open(f"{temp_name + ext}", "wb").write(mDict['image_req'].content)
+                    if not os.path.isdir("Album Art"):
+                        os.mkdir("Album Art")
+
+                    open(f"Album Art/{temp_name + ext}", "wb").write(mDict['image_req'].content)
 
                     # clear old image
                     self.imgLabel.config(image='')
 
-                    self.img = ImageTk.PhotoImage(Image.open(f"{temp_name + ext}").resize((450, 450)))
+                    self.img = ImageTk.PhotoImage(Image.open(f"Album Art/{temp_name + ext}").resize((450, 450)))
                     self.imgLabel.config(image=self.img)
                     self.imgLabel.image = self.img
                     self.imgLabel.pack()
 
-                    os.remove(f"{temp_name + ext}")
+                    # os.remove(f"{temp_name + ext}")
                 else:
                     messagebox.showinfo(
                         "Failed",
@@ -118,3 +121,16 @@ class MetadataGUI:
 
         metadata_thread = threading.Thread(target=thread_func)
         metadata_thread.start()
+
+
+def main():
+    root = Tk()
+    root.title('Music Metadata & Lyrics')
+    root.resizable(width=False, height=False)
+
+    MetadataGUI(root)
+    root.mainloop()
+
+
+if __name__ == "__main__":
+    main()

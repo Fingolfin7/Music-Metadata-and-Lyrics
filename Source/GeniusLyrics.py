@@ -128,7 +128,8 @@ def search_song_lyrics(song_name="", song_artist=""):
 def main():
     import os
     os.system("cls")
-    search_song_lyrics("Take Care", "Drake")
+    print(search_song_lyrics("Take Care", "Drake"))
+    input()
 
 
 if __name__ == "__main__":

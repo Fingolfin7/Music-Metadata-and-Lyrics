@@ -64,3 +64,16 @@ class GeniusLyricsGUI:
 
         search_thread = threading.Thread(target=thread_func)
         search_thread.start()
+
+
+def main():
+    root = Tk()
+    root.title('Music Metadata & Lyrics')
+    root.resizable(width=False, height=False)
+
+    GeniusLyricsGUI(root)
+    root.mainloop()
+
+
+if __name__ == "__main__":
+    main()
