@@ -1,8 +1,16 @@
 from tkinter import *
-from tkinter import ttk
 from PIL import ImageTk, Image
 from MetadataGUI import MetadataGUI
 from GeniusLyricsGUI import GeniusLyricsGUI
+
+
+# Globals
+root = Tk()
+root.title('Music Metadata & Lyrics')
+# icon = ImageTk.PhotoImage(Image.open("images/img1.ico"))
+# root.iconphoto(True, icon)
+root.resizable(width=False, height=False)
+welcomeFrame = Frame(root)
 
 
 def lyrics_btn(event=None):
@@ -16,14 +24,6 @@ def metadata_btn(event=None):
 
 
 def main():
-    root = Tk()
-    root.title('Music Metadata & Lyrics')
-    # icon = ImageTk.PhotoImage(Image.open("images/img1.ico"))
-    # root.iconphoto(True, icon)
-    root.resizable(width=False, height=False)
-
-    welcomeFrame = Frame(root)
-
     Label(welcomeFrame, text="Music Metadata & Lyrics", font="Calibri 16").pack(side=TOP, fill=BOTH)
     Label(welcomeFrame, text="Powered by Genius.com", font="Calibri 10 italic").pack(side=TOP, fill=BOTH, pady=5)
 
