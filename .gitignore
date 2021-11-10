@@ -136,6 +136,8 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# General
 /Source/song_lyrics.json
 /Source/auth_token.txt
 /Source/Album Art/
