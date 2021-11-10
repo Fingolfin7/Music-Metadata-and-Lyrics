@@ -141,3 +141,5 @@ cython_debug/
 /Source/song_lyrics.json
 /Source/auth_token.txt
 /Source/Album Art/
+*.xml
+*.iml
