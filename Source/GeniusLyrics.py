@@ -128,8 +128,12 @@ def search_song_lyrics(song_name="", song_artist=""):
 def main():
     import os
     os.system("cls")
-    print(search_song_lyrics("Take Care", "Drake"))
-    input()
+    while True:
+        input_song = input("Enter song name: ")
+        input_artist = input("Enter song artist: ")
+        print("")
+        print(search_song_lyrics(input_song, input_artist))
+        input()
 
 
 if __name__ == "__main__":

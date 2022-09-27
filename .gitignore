@@ -143,3 +143,4 @@ cython_debug/
 /Source/Album Art/
 *.xml
 *.iml
+Source/song_lyrics.json
