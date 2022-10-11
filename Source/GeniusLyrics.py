@@ -62,14 +62,19 @@ def search_song_lyrics(song_name="", song_artist=""):
 
             try:
                 # Genius has a tag called 'lyrics'
-                scraped_lyrics = html.find('div', class_='lyrics').get_text()
+                scraped_lyrics = html.find('div', class_='Lyrics__Container-sc-1ynbvzw-6 YYrds')
+                for br in scraped_lyrics.find_all('br'):
+                    br.replace_with('\n')
+
+                scraped_lyrics = scraped_lyrics.get_text()
 
                 # save to the dictionary object. These can then be retrieved later on for an offline search
                 artist = remove_non_ascii(artist)
                 title = remove_non_ascii(title)
                 song_dict.save_to_dict(artist, title, scraped_lyrics)
                 song_dict.save_dict()
-            except:
+            except Exception as e:
+                print(f"Error - {e}")
                 scraped_lyrics = None
 
             # return lyrics
