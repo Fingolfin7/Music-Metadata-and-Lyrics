@@ -97,6 +97,9 @@ class MetadataGUI:
 
                     # album art
                     ext = mDict['img_extension']
+                    if ext.find("?") != -1:
+                        ext = ext[0: ext.find("?")]
+
                     temp_name = self.album.get() + " by " + self.artist.get()
 
                     if not os.path.isdir("Album Art"):

@@ -162,6 +162,7 @@ def get_metadata(song_file, art_option=0):
             if extension.find("?") != -1:
                 extension = extension[0: extension.find("?")]
 
+
             # webp images refuse to save for some reason, so if the extension is webp, try and get the album cover
             # art which is usually a png or jpeg
             if extension in ["webp", "WEBP"]:
