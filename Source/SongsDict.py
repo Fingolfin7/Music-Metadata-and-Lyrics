@@ -15,9 +15,12 @@ class SongDict:
             self.dict[artist] = {song: lyrics}
             self.lower_keys.append(artist.lower())
         else:
+            self.dict[artist][song] = lyrics
+            """
             for key in self.dict:
-                if key.lower().find(artist.lower()) != -1:
+               if key.lower().find(artist.lower()) != -1:
                     self.dict[key][song] = lyrics
+            """
 
     def save_dict(self):
         json_songs = json.dumps(self.dict, indent=4)
