@@ -1,10 +1,7 @@
 # Music-Metadata-and-Lyrics
 Python project that updates metadata (including album art) and searches for lyrics from the Genius API. 
 
-## Prerequisites
-* Python 3
-* BeautifulSoup module
-* Eyed3 module
+## Requirements
 * A [Genius API Token](https://docs.genius.com/#/getting-started-h1)
 
 
