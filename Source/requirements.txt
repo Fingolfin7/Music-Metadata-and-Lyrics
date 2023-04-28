@@ -1,0 +1,13 @@
+unidecode
+beautifulsoup4
+coverage
+deprecation
+eyed3
+filetype
+packaging
+pyparsing
+soupsieve
+toml
+pillow
+requests
+lyricsgenius

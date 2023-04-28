@@ -1,10 +1,10 @@
-import requests
+import re
 import get_auth_token
+import lyricsgenius
 from functions import remove_non_ascii
 from check_internet import check_internet
 from ColourText import format_text
 from SongsDict import SongDict
-from bs4 import BeautifulSoup
 
 GENIUS_TOKEN = get_auth_token.get_token()
 
@@ -19,68 +19,34 @@ song_dict = SongDict()
 def search_song_lyrics(song_name="", song_artist=""):
     def online_search():
 
-        # use the song and artist names to search genius.com
-        query = {"q": f"{song_name} {song_artist}",
-                 "text_format": "plain"}
-        title = ""
-        artist = ""
-        headers = {"Authorization": f"Bearer {GENIUS_TOKEN}"}
+        genius = lyricsgenius.Genius(GENIUS_TOKEN)
+        song = genius.search_song(song_name, song_artist)
+        if song:
+            title = song.title
+            artist = song.artist
+            print(format_text(f"Found: [bright yellow][italic]'{title}' by '{artist}'[reset]"))
 
-        base_url = "https://api.genius.com/"
+            lyrics = song.lyrics
 
-        # get the results as a json file
-        data = requests.get(f"https://api.genius.com/search/", params=query, headers=headers).json()
+            # regex to place newlines before and after square brackets
+            lyrics = re.sub(r"(\[)", r"\n\1", lyrics)
+            lyrics = re.sub(r"(\])", r"\1\n", lyrics)
 
-        found_song = None
+            # more cleaning with regexes
+            lyrics = re.sub(r'\d*\s?Contributors?', '', lyrics)
+            lyrics = re.sub(r'\d*\s?Embed', '', lyrics)
 
-        # searches the returned hits
-        for hit in data['response']['hits']:
-            # compare the returned song title and artist name to the function arguments
-            result_title = str(hit['result']['title']).lower() + str(hit['result']['primary_artist']['name']).lower()
+            # clean up non-ascii characters
+            artist = remove_non_ascii(artist)
+            title = remove_non_ascii(title)
 
-            if result_title.find(song_artist.lower()) != -1 or result_title.find(
-                    song_name.lower()) != -1:  # if we can find the artist or song name, then we have found our song
-                found_song = hit
-                title = hit['result']['title_with_featured']
-                artist = hit['result']['primary_artist']['name']
-                print(format_text(f"Found: [bright yellow][italic]'{title}' by '{artist}'[reset]"))
-                break
-
-        if found_song:  # if we have found a hit
-            song_id = found_song['result']['id']  # get the song's id
-
-            # search genius for the song using it's id and get the 'path' to the document containing the song's lyrics
-            song_data = requests.get(f"{base_url}songs/{song_id}", headers=headers).json()
-            path = song_data['response']['song']['path']
-
-            # use beautifulsoup to scrape the lyric page for just the song lyrics
-            page = requests.get(f"http://genius.com{path}")
-            html = BeautifulSoup(page.text, "html.parser")
-
-            # remove script tags that they put in the middle of the lyrics
-            [h.extract() for h in html(['style', 'script'])]
-
-            try:
-                # Genius has a tag called 'lyrics'
-                scraped_lyrics = html.find('div', class_='Lyrics__Container-sc-1ynbvzw-6 YYrds')
-                for br in scraped_lyrics.find_all('br'):
-                    br.replace_with('\n')
-
-                scraped_lyrics = scraped_lyrics.get_text()
-
-                # save to the dictionary object. These can then be retrieved later on for an offline search
-                artist = remove_non_ascii(artist)
-                title = remove_non_ascii(title)
-                song_dict.save_to_dict(artist, title, scraped_lyrics)
-                song_dict.save_dict()
-            except Exception as e:
-                print(f"Error - {e}")
-                scraped_lyrics = None
-
-            # return lyrics
-            return scraped_lyrics
+            # save the lyrics to the dictionary
+            song_dict.save_to_dict(artist, title, lyrics)
+            song_dict.save_dict()
+            return lyrics
         else:
-            return found_song
+            return None
+
 
     # offline search. search the dictionary object for song lyrics
     def offline_search():
